@@ -174,7 +174,8 @@
     margin: 0 auto;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    /* justify-content: center; */
+    font-weight: bolder;
+    font-size: 22px;
 }
 .search-history-container {
     /* background-color: wheat; */
@@ -259,9 +260,10 @@
     /* padding-left: 30px; */
     /* overflow: hidden; */
 }
-/* .fieldset_body {
-    width: 20%;
-} */
+.words-searched p {
+    margin-bottom: 5px;
+}
+
 
 
 

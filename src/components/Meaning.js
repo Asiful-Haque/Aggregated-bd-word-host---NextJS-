@@ -9,6 +9,7 @@ import SearchList from "./Search_list";
 import SpeakButton from "./SpeakButton";
 import Head from "next/head";
 import AdSense from "./AdSense";
+import SearchHistoryComponent from "./SearchHistoryComponent";
 
 
 
@@ -30,8 +31,9 @@ const Meaning = async ({ language, word }) => {
     // notFound(); //front end call
     return redirect(`${process.env.NEXT_PUBLIC_BASE_URL_FRONT}/wrong?word=${word}`);
   }
+  // console.log(word);
+
   const meaningData = await result.json();
-  // console.log(meaningData);
   // console.log(meaningData.result.meaningPrimaryInfo.mean);
 
   const { width, height } = meaningData.result.meaningPrimaryInfo;
@@ -60,6 +62,7 @@ const Meaning = async ({ language, word }) => {
   
   return (
     <div className="hero-container">
+      <SearchHistoryComponent word={word}></SearchHistoryComponent>
       {/* Left Part */}
       <div className="left-part">
         <div className="left-part-up-down">
@@ -77,7 +80,7 @@ const Meaning = async ({ language, word }) => {
             </h1>
             <SpeakButton word={word}></SpeakButton>
             <hr className="styled-line" />
-            <h1 className="act-meaning">{meaningData.result.mean}</h1>
+            <h3 className="act-meaning">{details.m.join(", ")}</h3>
           </fieldset>
         </div>
         {/* -----------------------------------Image------------------------------------------ */}
@@ -109,6 +112,7 @@ const Meaning = async ({ language, word }) => {
               ([key, value]) =>
                 key !== "_id" &&
                 key !== "result" &&
+                key !== "m" &&
                 value && ( // Check if value exists and is not null
                   <div key={key} className="detail-item">
                     <h2
@@ -131,11 +135,11 @@ const Meaning = async ({ language, word }) => {
         </div>
         {/* -----------------------------------Details close--------------------------------- */}
         {/* -----------------------------------Two button------------------------------------ */}
-        {meaningData.result.prev && meaningData.result.nex && (
+        {meaningData.result.meaningPrimaryInfo.prev && meaningData.result.meaningPrimaryInfo.nex && (
           <div className="two-button">
             {/* Previous Button */}
             <Link
-              href={`/english-to-${language}-meaning-${meaningData.result.prev}`}
+              href={`/english-to-${language}-meaning-${meaningData.result.meaningPrimaryInfo.prev}`}
             >
               <button className="btn1">
                 <span>&larr; Previous</span>
@@ -144,7 +148,7 @@ const Meaning = async ({ language, word }) => {
 
             {/* Next Button */}
             <Link
-              href={`/english-to-${language}-meaning-${meaningData.result.nex}`}
+              href={`/english-to-${language}-meaning-${meaningData.result.meaningPrimaryInfo.nex}`}
             >
               <button className="btn2">
                 <span>Next &rarr;</span>

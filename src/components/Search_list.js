@@ -14,20 +14,6 @@ const SearchList = () => {
   }, []);
 
   return (
-    // <div className="search-list-container">
-    //   {searchHistory.length === 0 ? (
-    //     <p>
-    //       Currently, you do not have any favorite words. Please click on the heart icon to add words to your favorite list.
-    //     </p>
-    //   ) : (
-    //     <ul>
-    //       {searchHistory.map((word, index) => (
-    //         <li key={index}>{word}</li>
-    //       ))}
-    //     </ul>
-        
-    //   )}
-    // </div>
      <div className="search-list-container">
      {searchHistory.length === 0 ? (
        <p>
