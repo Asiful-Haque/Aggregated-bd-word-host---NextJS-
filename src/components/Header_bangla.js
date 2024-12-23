@@ -12,6 +12,7 @@ const Header_bangla = () => {
   const [searchWord, setSearchWord] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
   const router = useRouter();
+  const [apiSuggestions, setApiSuggestions] = useState([]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -23,6 +24,27 @@ const Header_bangla = () => {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchWord(value);
+
+    if (value.length > 3) {
+      fetchSuggestionsFromApi(value);
+    }
+  };
+
+  const fetchSuggestionsFromApi = async (word_greater_than_3) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/wordSuggestion/${word_greater_than_3}`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Fetched Data:", data);
+      setApiSuggestions(data.result_suggestion); // Assuming backend returns an array
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    }
   };
 
   // Handle search form submission
@@ -63,7 +85,7 @@ const Header_bangla = () => {
             {/* Mobile Image */}
             <Image
               className="mobile-logo"
-              src="https://content2.mcqstudy.com/bw-static-files/mobile_logo/bengali.webp" 
+              src="https://content2.mcqstudy.com/bw-static-files/mobile_logo/bengali.webp"
               alt="BDWORD"
               height={55}
               width={192}
@@ -86,11 +108,13 @@ const Header_bangla = () => {
             />
             <div className="dropdown">
               <ul className="dropdown-list">
-                {(() => {
-                  return searchHistory.map((word, index) => (
-                    <li key={index}>{word}</li>
-                  ));
-                })()}
+                {searchWord.length > 3
+                  ? apiSuggestions.map((word, index) => (
+                      <li key={index}>{word}</li>
+                    ))
+                  : searchHistory.map((word, index) => (
+                      <li key={index}>{word}</li>
+                    ))}
               </ul>
             </div>
             <button type="submit" className="search_btn" aria-label="search">

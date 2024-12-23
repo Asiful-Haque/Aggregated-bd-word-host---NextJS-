@@ -2,6 +2,7 @@ import React from "react";
 import "../styles/Hero_bangla.css";
 import Image from "next/image";
 import SearchList from "./Search_list";
+import FavWords from "./FavWords";
 
 const Hero_bangla = () => {
   return (
@@ -448,20 +449,7 @@ const Hero_bangla = () => {
             </button>
           </div>
         </div>
-        <div className="box_wrapper2">
-          <div className="inner_wrapper">
-            <fieldset className="fieldset_custom">
-              <legend className="custom_font2">Your Favorite Words</legend>
-
-              <div className="fieldset_body inner_details" id="load_favourite">
-                <div className="clear_fixdiv">
-                  Currently, you do not have any favorite words. Please click on
-                  the heart icon to add words to your favorite list.
-                </div>
-              </div>
-            </fieldset>
-          </div>
-        </div>
+        <FavWords></FavWords>
         <div className="box_wrapper2">
           <div className="inner_wrapper">
             <fieldset className="fieldset_custom">

@@ -1,0 +1,33 @@
+
+.heart-button {
+    background-color: #dd542f; 
+    border: none; 
+    color: white; 
+    padding: 10px 15px; 
+    border-radius: 50%; 
+    cursor: pointer; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: all 0.3s ease; 
+    margin-bottom: 10px;
+    margin-left: 5px;
+  }
+  
+  .heart-button:hover {
+    background-color: #ff3700; 
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); 
+  }
+  
+  .heart-button:active {
+    transform: scale(0.95); 
+  }
+  
+  .heart-button i {
+    font-size: 24px; 
+  }
+  
+  @media (max-width: 768px) {
+    .heart-button {
+      padding: 8px 12px; 
+      font-size: 18px; 
+    }
+  }

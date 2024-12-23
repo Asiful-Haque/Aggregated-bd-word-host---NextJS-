@@ -10,12 +10,13 @@ import SpeakButton from "./SpeakButton";
 import Head from "next/head";
 import AdSense from "./AdSense";
 import SearchHistoryComponent from "./SearchHistoryComponent";
-
-
+import FavWords from "./FavWords";
+import HeartButton from "./HeartButton";
 
 const Meaning = async ({ language, word }) => {
   // fetching data from api
-  const result = await fetch( //api call
+  const result = await fetch(
+    //api call
     `${process.env.NEXT_PUBLIC_BASE_URL}/english-to-${language}-meaning-${word}`,
     {
       method: "GET",
@@ -29,7 +30,9 @@ const Meaning = async ({ language, word }) => {
   // console.log(result);
   if (!result.ok) {
     // notFound(); //front end call
-    return redirect(`${process.env.NEXT_PUBLIC_BASE_URL_FRONT}/wrong?word=${word}`);
+    return redirect(
+      `${process.env.NEXT_PUBLIC_BASE_URL_FRONT}/wrong?word=${word}`
+    );
   }
   // console.log(word);
 
@@ -48,7 +51,6 @@ const Meaning = async ({ language, word }) => {
   if (fs.existsSync(imgSrcPathWebp)) {
     finalSrc = imgSrcWebp;
   }
-  
 
   const details = meaningData.result.meaningPrimaryInfo.details;
   const partsOfSpeechValues = meaningData.result.meaningSecondaryInfo.data.eng;
@@ -59,7 +61,7 @@ const Meaning = async ({ language, word }) => {
   // const ss_res = meaningData.ss_result;
   const data = meaningData.result.subtitleInfo;
   // console.log(data);
-  
+
   return (
     <div className="hero-container">
       <SearchHistoryComponent word={word}></SearchHistoryComponent>
@@ -72,15 +74,19 @@ const Meaning = async ({ language, word }) => {
             </legend>
             <h1 className="headforit">
               English to Bangla Meaning of{" "}
-              <span style={{ color: "blue", fontWeight: "bolder" }}>
+              <span style={{ color: " rgb(61, 125, 157)", fontWeight: "bolder" }}>
                 {" "}
                 {word}{" "}
               </span>
               - {meaningData.result.meaningPrimaryInfo.mean}
             </h1>
             <SpeakButton word={word}></SpeakButton>
+            <HeartButton word={word}></HeartButton>
             <hr className="styled-line" />
-            <h3 className="act-meaning">{details.m.join(", ")}</h3>
+            {details.m && details.m.length > 0 && (
+              <h3 className="act-meaning">{details.m.join(", ")}</h3>
+            )}
+            {/* <h3 className="act-meaning">{details.m.join(", ")}</h3> */}
           </fieldset>
         </div>
         {/* -----------------------------------Image------------------------------------------ */}
@@ -135,27 +141,28 @@ const Meaning = async ({ language, word }) => {
         </div>
         {/* -----------------------------------Details close--------------------------------- */}
         {/* -----------------------------------Two button------------------------------------ */}
-        {meaningData.result.meaningPrimaryInfo.prev && meaningData.result.meaningPrimaryInfo.nex && (
-          <div className="two-button">
-            {/* Previous Button */}
-            <Link
-              href={`/english-to-${language}-meaning-${meaningData.result.meaningPrimaryInfo.prev}`}
-            >
-              <button className="btn1">
-                <span>&larr; Previous</span>
-              </button>
-            </Link>
+        {meaningData.result.meaningPrimaryInfo.prev &&
+          meaningData.result.meaningPrimaryInfo.nex && (
+            <div className="two-button">
+              {/* Previous Button */}
+              <Link
+                href={`/english-to-${language}-meaning-${meaningData.result.meaningPrimaryInfo.prev}`}
+              >
+                <button className="btn1">
+                  <span>&larr; Previous</span>
+                </button>
+              </Link>
 
-            {/* Next Button */}
-            <Link
-              href={`/english-to-${language}-meaning-${meaningData.result.meaningPrimaryInfo.nex}`}
-            >
-              <button className="btn2">
-                <span>Next &rarr;</span>
-              </button>
-            </Link>
-          </div>
-        )}
+              {/* Next Button */}
+              <Link
+                href={`/english-to-${language}-meaning-${meaningData.result.meaningPrimaryInfo.nex}`}
+              >
+                <button className="btn2">
+                  <span>Next &rarr;</span>
+                </button>
+              </Link>
+            </div>
+          )}
         <hr className="styled-line" />
         {/* -----------------------------------Two button close----------------------------- */}
         {/* -----------------------------------1----------------------------- */}
@@ -548,13 +555,11 @@ const Meaning = async ({ language, word }) => {
       </div>
 
       <div className="right-part">
-        
-          {/* <script
+        {/* <script
             async
             custom-element="amp-ad"
             src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"
           ></script> */}
-        
         <div className="right-part-up-down">
           <fieldset className="right-fieldset">
             <legend className="article-title">Article Section</legend>
@@ -563,8 +568,8 @@ const Meaning = async ({ language, word }) => {
                 <Image
                   src="https://server3.mcqstudy.com/blog_image/Capt.webp" // Use absolute path from the public directory
                   alt="Native speaker 'mistakes' – past participles, 'me', splitting infinitives"
-                  width={303} 
-                  height={180} 
+                  width={303}
+                  height={180}
                   style={{ maxHeight: "180px", width: "100%", height: "auto" }} // Applying maxHeight directly
                 />
               </div>
@@ -678,7 +683,6 @@ const Meaning = async ({ language, word }) => {
             </div>
           </fieldset>
         </div>
-
         <div className="box_wrapper3">
           <div className="inner_wrapper3">
             <button className="btn_default3 bdr_radius2">
@@ -698,21 +702,7 @@ const Meaning = async ({ language, word }) => {
             </button>
           </div>
         </div>
-        <div className="box_wrapper2">
-          <div className="inner_wrapper">
-            <fieldset className="fieldset_custom">
-              <legend className="custom_font2">Your Favorite Words</legend>
-
-              <div className="fieldset_body">
-                <div className="clear_fixdiv">
-                  Currently, you do not have any favorite words. Please click on
-                  the heart icon to add words to your favorite list.
-                </div>
-              </div>
-            </fieldset>
-          </div>
-        </div>
-
+        <FavWords></FavWords> {/*Taking css from meaning.css*/}
         <div className="box_wrapper2">
           <div className="inner_wrapper">
             <fieldset className="fieldset_custom">
@@ -727,7 +717,6 @@ const Meaning = async ({ language, word }) => {
             </fieldset>
           </div>
         </div>
-        
         <div className="ad-box">
           <AdSense></AdSense>
         </div>
@@ -737,4 +726,3 @@ const Meaning = async ({ language, word }) => {
 };
 
 export default Meaning;
-
