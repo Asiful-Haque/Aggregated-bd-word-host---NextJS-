@@ -1,6 +1,7 @@
+import Footer from '@/components/Footer';
 import Header_bangla from '@/components/Header_bangla';
 import Meaning from '@/components/Meaning';
-// import { notFound } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import React from 'react'
 
 export async function generateMetadata({ params }) {
@@ -39,14 +40,18 @@ const meaning = async({ params }) => {
     // console.log(process.env.NEXT_PUBLIC_BASE_URL);
 
     if (!language || !word) {
-      // notFound();
-      return <p>Invalid language or word</p>;
+      notFound();
+      // return <p>Invalid language or word</p>;
+    }
+    else if (meaning === 'shuffle_game') {
+      notFound();
     }
 
   return (
     <div>
         <Header_bangla></Header_bangla>
         <Meaning language={language} word={word}></Meaning>
+        <Footer></Footer>
     </div>
   )
 }

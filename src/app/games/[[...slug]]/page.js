@@ -1,4 +1,5 @@
 import NotFound from '@/app/not-found';
+import { notFound } from 'next/navigation';
 
 export default async function Game1CatchAll({ params }) {
     const slug = await params;
@@ -10,5 +11,5 @@ export default async function Game1CatchAll({ params }) {
       return <div>Valid Path: Shuffle Game</div>;
     }
   
-    return <div>Invalid Path</div>;
+    return notFound();
   }
