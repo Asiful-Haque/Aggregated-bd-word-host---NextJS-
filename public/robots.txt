@@ -1,0 +1,109 @@
+# Googlebot
+User-agent: Googlebot
+Allow: /
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+
+# DuckDuckBot
+User-agent: DuckDuckBot
+Allow: /
+
+# Slurp
+User-agent: Slurp
+Allow: /
+
+# AhrefsBot
+User-agent: AhrefsBot
+Disallow: /
+
+# SemrushBot
+User-agent: SemrushBot
+Disallow: /
+
+# MJ12bot
+User-agent: MJ12bot
+Disallow: /
+
+# DotBot
+User-agent: DotBot
+Disallow: /
+
+# Baiduspider
+User-agent: Baiduspider
+Disallow: /
+
+# YandexBot
+User-agent: YandexBot
+Disallow: /
+
+# Sogou
+User-agent: Sogou
+Disallow: /
+
+# Exabot
+User-agent: Exabot
+Disallow: /
+
+# PetalBot
+User-agent: PetalBot
+Disallow: /
+
+# crawler
+User-agent: crawler
+Disallow: /
+
+# python-requests
+User-agent: python-requests
+Disallow: /
+
+# wget
+User-agent: wget
+Disallow: /
+
+# curl
+User-agent: curl
+Disallow: /
+
+# *
+User-agent: *
+Disallow: /admin
+
+# *
+User-agent: *
+Disallow: /api/private
+
+# *
+User-agent: *
+Disallow: /server
+
+# *
+User-agent: *
+Disallow: /config
+
+# *
+User-agent: *
+Disallow: /.env
+
+# *
+User-agent: *
+Disallow: /private
+
+# *
+User-agent: *
+Disallow: /*.pdf
+
+# *
+User-agent: *
+Disallow: /*.json
+
+# *
+User-agent: *
+Disallow: /scripts
+
+# Host
+Host: http://localhost:3000
+
+# Sitemaps
+Sitemap: http://localhost:3000/sitemap.xml

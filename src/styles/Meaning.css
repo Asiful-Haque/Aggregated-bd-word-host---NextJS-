@@ -369,6 +369,7 @@
     font-size: larger;
     padding: 5px;
     border: none;
+    cursor: pointer;
 }
 .btn2 {
     background-color: rgb(19,51,48);
@@ -376,6 +377,7 @@
     font-size: larger;
     padding: 5px;
     border: none;
+    cursor: pointer;
 }
 .btn1:hover, .btn2:hover {
     background-color: rgb(255, 255, 255);
@@ -632,3 +634,12 @@
   }
 
   
+  .game-container {
+    display: inline-block; 
+    overflow: hidden; 
+    position: relative;
+    /* transition: transform 0.3s ease-in-out; */
+  }
+  /* .game-container:hover {
+    transform: scale(1.1); 
+  } */

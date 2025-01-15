@@ -52,15 +52,19 @@ const Meaning = async ({ language, word }) => {
     finalSrc = imgSrcWebp;
   }
 
-  const details = meaningData.result.meaningPrimaryInfo.details;
-  const partsOfSpeechValues = meaningData.result.meaningSecondaryInfo.data.eng;
-  const examples = meaningData.result.meaningSecondaryInfo.data.examples;
-  const phrases = meaningData.result.meaningSecondaryInfo.data.phrase;
-  const synonyms = meaningData.result.meaningSecondaryInfo.data.syn;
-  const antonyms = meaningData.result.meaningSecondaryInfo.data.anto;
-  // const ss_res = meaningData.ss_result;
-  const data = meaningData.result.subtitleInfo;
-  // console.log(data);
+  const details = meaningData?.result?.meaningPrimaryInfo?.details ?? null;
+const partsOfSpeechValues =
+  meaningData?.result?.meaningSecondaryInfo?.data?.eng ?? null;
+const examples =
+  meaningData?.result?.meaningSecondaryInfo?.data?.examples ?? [];
+const phrases =
+  meaningData?.result?.meaningSecondaryInfo?.data?.phrase ?? [];
+const synonyms =
+  meaningData?.result?.meaningSecondaryInfo?.data?.syn ?? [];
+const antonyms =
+  meaningData?.result?.meaningSecondaryInfo?.data?.anto ?? [];
+const data = meaningData?.result?.subtitleInfo ?? null;
+
 
   return (
     <div className="hero-container">
@@ -74,7 +78,9 @@ const Meaning = async ({ language, word }) => {
             </legend>
             <h1 className="headforit">
               English to Bangla Meaning of{" "}
-              <span style={{ color: " rgb(61, 125, 157)", fontWeight: "bolder" }}>
+              <span
+                style={{ color: " rgb(61, 125, 157)", fontWeight: "bolder" }}
+              >
                 {" "}
                 {word}{" "}
               </span>
@@ -103,6 +109,7 @@ const Meaning = async ({ language, word }) => {
                   title={word}
                   style={{ width: "100%", height: "auto" }}
                   loading="lazy"
+                  // placeholder="blur"
                 />
               </div>
             </div>
@@ -166,7 +173,7 @@ const Meaning = async ({ language, word }) => {
         <hr className="styled-line" />
         {/* -----------------------------------Two button close----------------------------- */}
         {/* -----------------------------------1----------------------------- */}
-        {partsOfSpeechValues && (
+        {partsOfSpeechValues && Object.keys(partsOfSpeechValues).length > 0 && (
           <div className="defination">
             <div className="headline">
               <h2 className="headline-h1">Definitions of {word} in English</h2>
@@ -212,7 +219,7 @@ const Meaning = async ({ language, word }) => {
         )}
         {/* -----------------------------------1----------------------------- */}
         {/* -----------------------------------2----------------------------- */}
-        {examples && (
+        {examples && examples.length > 0 && (
           <div className="examples">
             <div className="headline">
               <h2 className="headline-h1">Examples of {word} in English</h2>
@@ -240,7 +247,7 @@ const Meaning = async ({ language, word }) => {
         )}
         {/* -----------------------------------2----------------------------- */}
         {/* -----------------------------------3----------------------------- */}
-        {phrases && (
+        {phrases && phrases.length > 0 && (
           <div className="related-phrase-container">
             <div className="headline">
               <h2 className="headline-h1">Related phrases of {word}</h2>
@@ -256,53 +263,61 @@ const Meaning = async ({ language, word }) => {
         )}
         {/* -----------------------------------3----------------------------- */}
         {/* -----------------------------------4----------------------------- */}
-        {synonyms && (
-          <div className="syno-anto-container">
-            <div className="headline">
-              <h2 className="headline-h1">synonyms of {word}</h2>
+        {synonyms &&
+          ((Array.isArray(synonyms) && synonyms.length > 0) ||
+            (typeof synonyms === "object" &&
+              synonyms !== null &&
+              Object.keys(synonyms).length > 0)) && (
+            <div className="syno-anto-container">
+              <div className="headline">
+                <h2 className="headline-h1">synonyms of {word}</h2>
+              </div>
+              <div className="syno">
+                {Object.entries(synonyms).map(([key, value]) =>
+                  Array.isArray(value)
+                    ? value.map((item, index) => (
+                        <div key={index} className="each-syno">
+                          <p>{item}</p>
+                        </div>
+                      ))
+                    : Array.isArray(synonyms)
+                    ? synonyms.map((item, index) => (
+                        <div key={index} className="each-syno">
+                          <p>{item}</p>
+                        </div>
+                      ))
+                    : "No data available"
+                )}
+              </div>
             </div>
-            <div className="syno">
-              {Object.entries(synonyms).map(([key, value]) =>
-                Array.isArray(value)
-                  ? value.map((item, index) => (
-                      <div key={index} className="each-syno">
-                        <p>{item}</p>
-                      </div>
-                    ))
-                  : Array.isArray(synonyms)
-                  ? synonyms.map((item, index) => (
-                      <div key={index} className="each-syno">
-                        <p>{item}</p>
-                      </div>
-                    ))
-                  : "No data available"
-              )}
-            </div>
-          </div>
-        )}
+          )}
 
-        {antonyms && (
-          <div className="syno-anto-container">
-            <div className="headline">
-              <h2 className="headline-h1">Antonyms of {word}</h2>
+        {antonyms &&
+          ((Array.isArray(antonyms) && antonyms.length > 0) ||
+            (typeof antonyms === "object" &&
+              antonyms !== null &&
+              Object.keys(antonyms).length > 0)) && (
+            <div className="syno-anto-container">
+              <div className="headline">
+                <h2 className="headline-h1">Antonyms of {word}</h2>
+              </div>
+              <div className="syno">
+                {Array.isArray(antonyms)
+                  ? antonyms.map((item, index) => (
+                      <div key={index} className="each-syno">
+                        <p>{item}</p>
+                      </div>
+                    ))
+                  : typeof antonyms === "object" && antonyms !== null
+                  ? Object.entries(antonyms).map(([key, value], index) => (
+                      <div key={index} className="each-syno">
+                        <p>{value}</p>
+                      </div>
+                    ))
+                  : "No data available"}
+              </div>
             </div>
-            <div className="syno">
-              {Array.isArray(antonyms)
-                ? antonyms.map((item, index) => (
-                    <div key={index} className="each-syno">
-                      <p>{item}</p>
-                    </div>
-                  ))
-                : typeof antonyms === "object" && antonyms !== null
-                ? Object.entries(antonyms).map(([key, value], index) => (
-                    <div key={index} className="each-syno">
-                      <p>{value}</p>
-                    </div>
-                  ))
-                : "No data available"}
-            </div>
-          </div>
-        )}
+          )}
 
         {/* -----------------------------------4----------------------------- */}
         {/* -----------------------------------SS part----------------------------- */}
@@ -329,6 +344,8 @@ const Meaning = async ({ language, word }) => {
                       fallback={fallbackUrl}
                       style={{ width: "100%", height: "auto" }}
                       className="image"
+                      loading="lazy"
+                      // placeholder="blur"
                     />
                   </div>
                   {/* <p className="word">{word}</p> */}
@@ -716,6 +733,20 @@ const Meaning = async ({ language, word }) => {
               </div>
             </fieldset>
           </div>
+        </div>
+        <div className="game-container">
+          <Link
+            href={`${process.env.NEXT_PUBLIC_BASE_URL_FRONT}/games/shuffle_game`}
+            title="Play games"
+          >
+            <Image
+              src="/games.webp"
+              alt="Play games"
+              width={400}
+              height={200}
+              style={{ width: "100%", height: "auto" }}
+            />
+          </Link>
         </div>
         <div className="ad-box">
           <AdSense></AdSense>

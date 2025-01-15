@@ -4,31 +4,40 @@ import "../styles/Meaning.css";
 
 const FavWords = () => {
   const [favWords, setFavWords] = useState([]);
-  // Load initial history from localStorage when component mounts
+
+  // Load initial history from localStorage when the component mounts
   useEffect(() => {
     const loadFavWords = () => {
       if (typeof window !== "undefined") {
-        const storedFavWords =
-          JSON.parse(localStorage.getItem("favWords")) || [];
+        const storedFavWords = JSON.parse(localStorage.getItem("favWords")) || [];
         setFavWords(storedFavWords);
       }
     };
 
-    loadFavWords(); // Load the search history initially
+    loadFavWords(); // Load the favorite words initially
 
     // Listen to the custom event to update localStorage
     const handleEvent = (e) => {
       if (e.detail && e.detail.targetComponent === "FavWords") {
         const { favWord } = e.detail;
-        console.log("Adding to favWords:", favWord);
         setFavWords((prevWords) => {
-          const updatedWords = prevWords.filter((item) => item !== favWord);
-          updatedWords.unshift(favWord);
+          let updatedWords = [...prevWords];
 
-          if (updatedWords.length > 5) {
-            updatedWords.pop(); // Keep only the last 5 entries
+          // Check if the word is already in the list
+          if (updatedWords.includes(favWord)) {
+            // If it's already in the list, remove it
+            updatedWords = updatedWords.filter((item) => item !== favWord);
+          } else {
+            // If it's not in the list, add it to the beginning
+            updatedWords.unshift(favWord);
           }
 
+          // Limit the list to the last 5 entries
+          if (updatedWords.length > 5) {
+            updatedWords.pop(); // Remove the oldest word if the list exceeds 5
+          }
+
+          // Save updated list to localStorage
           if (typeof window !== "undefined") {
             localStorage.setItem("favWords", JSON.stringify(updatedWords));
           }
@@ -44,6 +53,7 @@ const FavWords = () => {
       window.removeEventListener("addToLocalStorage:FavWords", handleEvent);
     };
   }, []);
+
   return (
     <div className="box_wrapper2">
       <div className="inner_wrapper">
@@ -60,8 +70,8 @@ const FavWords = () => {
               ) : (
                 <div className="fav-history-container">
                   <p>
-                    You can found here all the words that you have marked as
-                    favourite on our wibsite.
+                    You can find here all the words that you have marked as
+                    favorite on our website.
                   </p>
                   {favWords.map((word, index) => (
                     <div key={index} className="fav-history-item">

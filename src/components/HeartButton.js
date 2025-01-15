@@ -6,12 +6,12 @@ import React from "react";
 
 const HeartButton = ({ word }) => {
   const handleButtonClick = () => {
-    console.log("clicked on ",word);
+    // console.log("clicked on ",word);
     const event = new CustomEvent("addToLocalStorage:FavWords", {
       detail: { favWord: word, targetComponent: "FavWords" },
     });
     window.dispatchEvent(event);
-    console.log("Event dispatched!");
+   // console.log("Event dispatched!");
   };
 
   return (

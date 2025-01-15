@@ -3,8 +3,33 @@ import Meaning from '@/components/Meaning';
 // import { notFound } from 'next/navigation';
 import React from 'react'
 
-const meaning = async({ params }) => {
+export async function generateMetadata({ params }) {
+  const { meaning } = await params;
   
+  const wordParts = meaning.split('-').slice(4); 
+  const word = wordParts.join(' '); 
+  const language = meaning.split('-')[2];
+
+  const capitalizedLanguage = language.charAt(0).toUpperCase() + language.slice(1);
+
+  // Keywords dynamically based on language and word
+  const keywords = `english to ${language}, translate english to ${language}, english to ${language} dictionary, english to ${language} meaning, english to ${language} translation online, ${language} to english translate, ${language} to english translation online, best ${language} to english translator, meaning english to ${language}, english to ${language} dictionary online, meaning ${language} to english, translate english to ${language} online`;
+
+  // Return the SEO metadata object
+  return {
+    title: `Translate English to ${capitalizedLanguage}: ${word}`,
+    description: `Find the meaning of "${word}" in ${capitalizedLanguage}. Get detailed translations, definitions, and examples.`,
+    keywords, // Added dynamic keywords here
+    openGraph: {
+      title: `Translate English to ${capitalizedLanguage}: ${word}`,
+      description: `Learn the meaning of "${word}" in ${capitalizedLanguage}.`,
+      url: `https://english-welsh.net/english-to-${language}-meaning-${word}`,
+    },
+    canonical: `https://english-welsh.net/english-to-${language}-meaning-${word}`, // Add canonical URL
+  };
+}
+
+const meaning = async({ params }) => {
     const { meaning } = await params;
     const wordParts = meaning.split('-').slice(4); // Starts from index 4 (after 'meaning')
     const word = wordParts.join(' '); // Join parts with spaces

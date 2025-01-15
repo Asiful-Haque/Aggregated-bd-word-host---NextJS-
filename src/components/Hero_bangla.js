@@ -3,6 +3,7 @@ import "../styles/Hero_bangla.css";
 import Image from "next/image";
 import SearchList from "./Search_list";
 import FavWords from "./FavWords";
+import Link from 'next/link';
 
 const Hero_bangla = () => {
   return (
@@ -463,6 +464,20 @@ const Hero_bangla = () => {
               </div>
             </fieldset>
           </div>
+        </div>
+        <div className="game-container"> {/*Taking css from global meaning.css*/}
+          <Link
+            href={`${process.env.NEXT_PUBLIC_BASE_URL_FRONT}/games/shuffle_game`}
+            title="Play games"
+          >
+            <Image
+              src="/games.webp"
+              alt="Play games"
+              width={400}
+              height={200}
+              style={{ width: "100%", height: "auto" }}
+            />
+          </Link>
         </div>
       </div>
     </div>

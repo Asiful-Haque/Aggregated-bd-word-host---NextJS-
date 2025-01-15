@@ -1,8 +1,6 @@
-// Import necessary modules
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import Image from "next/image";
 import { FaBars } from "react-icons/fa"; // Ensure correct import
 import "../styles/Header_bangla.css";
@@ -11,9 +9,11 @@ const Header_bangla = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchWord, setSearchWord] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
-  const router = useRouter();
   const [apiSuggestions, setApiSuggestions] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false); // Manage dropdown visibility
+  const router = useRouter();
 
+  // Load search history from localStorage
   useEffect(() => {
     if (typeof window !== "undefined") {
       const history = JSON.parse(localStorage.getItem("searchHistory")) || [];
@@ -21,44 +21,80 @@ const Header_bangla = () => {
     }
   }, []);
 
+  // Handle search input changes
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchWord(value);
 
     if (value.length > 3) {
       fetchSuggestionsFromApi(value);
+    } else {
+      setShowDropdown(false); // Hide dropdown when less than 4 characters
     }
+
+    setShowDropdown(true); // Show dropdown when typing
   };
 
-  const fetchSuggestionsFromApi = async (word_greater_than_3) => {
+  // Fetch suggestions from the API
+  const fetchSuggestionsFromApi = async (word) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/wordSuggestion/${word_greater_than_3}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/wordSuggestion/${word}`,
+        {
+          method: "GET",
+          cache: "no-store",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log("Fetched Data:", data);
-      setApiSuggestions(data.result_suggestion); // Assuming backend returns an array
+      setApiSuggestions(data.result_suggestion); 
     } catch (error) {
       console.error("Error fetching suggestions:", error);
     }
   };
 
-  // Handle search form submission
+  
   const handleSearch = (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
     if (searchWord.trim()) {
       const formattedQuery = searchWord.trim().replace(/\s+/g, "-");
       const targetUrl = `${process.env.NEXT_PUBLIC_BASE_URL_FRONT}/english-to-bengali-meaning-${formattedQuery}`;
-
-      setSearchWord(""); // Clear the input
-      //   setSearchHistory(updatedHistory); // Update the local state
-
-      router.replace(targetUrl); // Navigate to the target URL
+      setSearchWord(""); 
+      router.replace(targetUrl); 
     }
+  };
+
+  // Close dropdown if clicking outside
+  const handleClickOutside = (e) => {
+    if (!e.target.closest('.search_fld')) {
+      setShowDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  // Handle clicking on a suggestion
+  const handleSuggestionClick = (word) => {
+    // console.log("Suggestion clicked:", word);
+    setSearchWord(word);
+    setApiSuggestions([]); 
+    setShowDropdown(false); 
+
+    const formattedQuery = word.trim().replace(/\s+/g, "-");
+    const targetUrl = `${process.env.NEXT_PUBLIC_BASE_URL_FRONT}/english-to-bengali-meaning-${formattedQuery}`;
+    router.replace(targetUrl); // Navigate to the meaning page
   };
 
   // Toggle menu visibility
@@ -95,7 +131,7 @@ const Header_bangla = () => {
           </a>
         </div>
 
-        {/* Search Field */}
+        {/* Search Section */}
         <div className="search_fld">
           <form onSubmit={handleSearch} className="search_field">
             <input
@@ -105,22 +141,37 @@ const Header_bangla = () => {
               value={searchWord} // Controlled input
               onChange={handleSearchChange} // Update input value
               required
+              onFocus={() => setShowDropdown(true)}
             />
-            <div className="dropdown">
-              <ul className="dropdown-list">
-                {searchWord.length > 3
-                  ? apiSuggestions.map((word, index) => (
-                      <li key={index}>{word}</li>
-                    ))
-                  : searchHistory.map((word, index) => (
-                      <li key={index}>{word}</li>
-                    ))}
-              </ul>
-            </div>
             <button type="submit" className="search_btn" aria-label="search">
               🔍
             </button>
           </form>
+
+          {/* Dropdown List */}
+          {showDropdown && (
+            <div className="dropdown">
+              <ul className="dropdown-list">
+                {searchWord.length > 3
+                  ? apiSuggestions.map((word, index) => (
+                      <li
+                        key={index}
+                        onClick={(e) => handleSuggestionClick(word)}
+                      >
+                        {word}
+                      </li>
+                    ))
+                  : searchHistory.map((word, index) => (
+                      <li
+                        key={index}
+                        onClick={(e) => handleSuggestionClick(word)}
+                      >
+                        {word}
+                      </li>
+                    ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Hamburger Icon */}
