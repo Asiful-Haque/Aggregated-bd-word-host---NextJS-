@@ -6,6 +6,7 @@ import { FaBars } from "react-icons/fa"; // Ensure correct import
 import "../styles/Header_bangla.css";
 
 const Header_bangla = () => {
+  const [isMounted, setIsMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchWord, setSearchWord] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
@@ -13,13 +14,20 @@ const Header_bangla = () => {
   const [showDropdown, setShowDropdown] = useState(false); // Manage dropdown visibility
   const router = useRouter();
 
-  // Load search history from localStorage
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const history = JSON.parse(localStorage.getItem("searchHistory")) || [];
-      setSearchHistory(history);
-    }
+   // Load search history from localStorage
+   useEffect(() => {
+    const loadSearchHistory = () => {
+      if (typeof window !== "undefined") {
+        const history = JSON.parse(localStorage.getItem("searchHistory")) || [];
+        setSearchHistory(history);
+      }
+    };
+
+    loadSearchHistory();
+    setIsMounted(true); // Set mounted to true after the component is rendered on the client
   }, []);
+
+  
 
   // Handle search input changes
   const handleSearchChange = (e) => {
@@ -78,12 +86,14 @@ const Header_bangla = () => {
     }
   };
 
+  
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
 
   // Handle clicking on a suggestion
   const handleSuggestionClick = (word) => {
@@ -101,6 +111,11 @@ const Header_bangla = () => {
   const showHideMenu = () => {
     setMenuOpen(!menuOpen);
   };
+  
+  // Prevent rendering client-specific logic during SSR
+  if (!isMounted) {
+    return <div></div>; // Return an empty div or loading state during SSR
+  }
 
   return (
     <div className="header_wrapper">
