@@ -1,17 +1,17 @@
-import About from "@/components/About"
 import Footer from "@/components/Footer"
 import Header_bangla from "@/components/Header_bangla"
+import Privacy from "@/components/Privacy"
 
 
-const about = async() => {
+const privacy = async() => {
 
   return (
     <div>
         <Header_bangla></Header_bangla>
-        <About></About>
+        <Privacy></Privacy> {/* taking css from about.css */}
         <Footer></Footer>
     </div>
   )
 }
 
-export default about
+export default privacy
